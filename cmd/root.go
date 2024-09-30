@@ -18,7 +18,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "aws-cron",
 	Short: "List scheduled jobs",
-	Long: `List scheduled jobs with their scheduled time, status, name and description`,
+	Long:  `List scheduled jobs with their scheduled time, status, name and description`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Load the AWS SDK config from the environment or shared config
@@ -66,9 +66,9 @@ func printAsTable(rules []types.Rule) {
 			scheduleExpression := *rule.ScheduleExpression
 
 			if rule.State == "ENABLED" {
-				t.AddRow(scheduleExpression, tml.Sprintf("<green>"+string(rule.State)+"</green>"), *rule.Name + "\n" + tml.Sprintf("<dim>"+ *rule.Description + "</dim>"))
+				t.AddRow(scheduleExpression, tml.Sprintf("<green>"+string(rule.State)+"</green>"), *rule.Name+"\n"+tml.Sprintf("<dim>"+*rule.Description+"</dim>"))
 			} else {
-				t.AddRow(scheduleExpression, tml.Sprintf("<red>"+string(rule.State)+"</red>"), *rule.Name + "\n" + tml.Sprintf("<dim>"+ *rule.Description + "</dim>"))
+				t.AddRow(scheduleExpression, tml.Sprintf("<red>"+string(rule.State)+"</red>"), *rule.Name+"\n"+tml.Sprintf("<dim>"+*rule.Description+"</dim>"))
 			}
 		}
 	}

@@ -1,9 +1,14 @@
 BINARY_NAME=aws-cron
 
-.PHONY: help
-help: ## Show this help
-	@echo 'Usage:'
-	@grep -E '^\S+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-40s\033[0m %s\n", $$1, $$2}'
+.PHONY: help build run clean test dep vendor vet tidy
+
+help:   ## show this help
+	@echo 'usage: make [target] ...'
+	@echo ''
+	@echo 'targets:'
+	@egrep '^(.+)\:\ .*##\ (.+)' ${MAKEFILE_LIST} | sed 's/:.*##/#/' | column -t -c 2 -s '#'
+
+default: help
 
 build-all: ## build all
 	GOARCH=amd64 GOOS=darwin go build -o ${BINARY_NAME}-darwin main.go
@@ -31,13 +36,15 @@ test_coverage: ## tests coverage
 dep: ## download dependencies
 	go mod download
 
+update-dependencies:  ## update golang dependencies
+	dep ensure
+
+vendor: ## save all dependencies in the repo
+	go mod vendor
+
 vet: ## vet
 	go vet
 
-.PHONY: tidy
-tidy: ## tidy tidy modfiles and format .go files
+tidy: ## tidy modfiles and format .go files, removes unused dependencies
 	go mod tidy -v
 	go fmt ./...
-
-# lint: ## lint
-# 	golangci-lint run --enable-all
