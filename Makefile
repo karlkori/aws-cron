@@ -1,8 +1,17 @@
 BINARY_NAME=aws-cron
 
+BUILD_DATE?="$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')"
+GIT_COMMIT?="$(shell git rev-parse HEAD)"
+VERSION?="$(shell git describe --tags --abbrev=0 | tr -d '\n')"
+
+LDFLAGS ?= -s -w \
+	-X github.com/karlkori/aws-cron/internal/version.buildDate=$(BUILD_DATE) \
+	-X github.com/karlkori/aws-cron/internal/version.gitCommit=$(GIT_COMMIT) \
+	-X github.com/karlkori/aws-cron/internal/version.gitVersion=$(VERSION)
+
 .PHONY: help build run clean test dep vendor vet tidy
 
-help:   ## show this help
+help: ## show this help
 	@echo 'usage: make [target] ...'
 	@echo ''
 	@echo 'targets:'
@@ -11,21 +20,17 @@ help:   ## show this help
 default: help
 
 build-all: ## build all
-	GOARCH=amd64 GOOS=darwin go build -o ${BINARY_NAME}-darwin main.go
-	GOARCH=amd64 GOOS=linux go build -o ${BINARY_NAME}-linux main.go
-	GOARCH=amd64 GOOS=windows go build -o ${BINARY_NAME}-windows main.go
+	goreleaser release --snapshot --clean
 
 build: ## build
-	GOARCH=arm64 GOOS=darwin go build -o ${BINARY_NAME} main.go
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=darwin go build -o ${BINARY_NAME} -ldflags "$(LDFLAGS)" *.go
 
 run: build ## build and run binary
 	./${BINARY_NAME}
 
 clean: ## cleanup
 	go clean
-	rm ${BINARY_NAME}-darwin
-	rm ${BINARY_NAME}-linux
-	rm ${BINARY_NAME}-windows
+	rm -rf ./dist
 
 test: ## run tests
 	go test ./...

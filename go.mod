@@ -8,6 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/eventbridge v1.34.3
 	github.com/liamg/tml v0.7.0
 	github.com/spf13/cobra v1.8.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

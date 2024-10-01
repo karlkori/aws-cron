@@ -8,7 +8,13 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - id: "aws-cron"
+    ldflags:
+      - -s -w
+      - -X github.com/karlkori/aws-cron/internal/version.buildDate={{.Date}}
+      - -X github.com/karlkori/aws-cron/internal/version.gitCommit={{.Commit}}
+      - -X github.com/karlkori/aws-cron/internal/version.gitVersion={{.Version}}
+    env:
       - CGO_ENABLED=0
     goos:
       - linux

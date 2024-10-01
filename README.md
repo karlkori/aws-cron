@@ -1,6 +1,8 @@
 # AWS CRON
 
-List all scheduled jobs (lambda, fargate) via Event Bridge.
+At AWS a cronjob can be implemented in many ways, but probably, the most popular way is to trigger a job (lambda or Fargate task) by creating an EventBridge rule with a schedule.
+
+So this cli command can list all such scheduled jobs.
 
 ## Example of command output
 
