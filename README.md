@@ -35,8 +35,9 @@ aws-cron
 aws-cron --output=table
 aws-cron -o=text
 
-# todo: show cli version
+# show cli version
 aws-cron version
+aws-cron version --output=json
 
 # todo: trigger cronjob
 aws-cron <name/arn?> trigger
@@ -45,7 +46,7 @@ aws-cron <name/arn?> trigger
 ## Release
 
 ```bash
-git tag -a v0.1.1 -m "Release v0.1.1"
-git push origin v0.1.0
+git tag -a v0.1.3 -m "Release v0.1.3"
+git push origin v0.1.3
 
 ```
