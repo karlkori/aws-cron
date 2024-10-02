@@ -48,5 +48,6 @@ aws-cron <name/arn?> trigger
 ```bash
 git tag -a v0.1.3 -m "Release v0.1.3"
 git push origin v0.1.3
+git push origin
 
 ```
