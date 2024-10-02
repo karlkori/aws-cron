@@ -12,9 +12,9 @@ import (
 )
 
 var versionCmd = &cobra.Command{
-	Use: "version",
+	Use:   "version",
 	Short: "Show version",
-	Long: `Show version number and other build related info.`,
+	Long:  `Show version number and other build related info.`,
 	Example: `
 	Display simple text version
 	aws-cron version
@@ -26,30 +26,31 @@ var versionCmd = &cobra.Command{
 	aws-cron version --output=json
 	`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		output, err := cmd.Flags().GetString("output")
+		outputFormat, err := cmd.Flags().GetString("output")
 		if err != nil {
 			return err
 		}
 
-		if output != "" && output != "json" && output != "yaml" {
+		if outputFormat != "" && outputFormat != "json" && outputFormat != "yaml" {
 			return fmt.Errorf("must provide valid output")
 		}
 
 		versionInfo := version.Get()
 
-		if output == "json" {
+		switch {
+		case outputFormat == "json":
 			marshaled, err := json.MarshalIndent(&versionInfo, "", "  ")
 			if err != nil {
 				return err
 			}
 			fmt.Println(string(marshaled))
-		} else if output == "yaml" {
+		case outputFormat == "yaml":
 			marshaled, err := yaml.Marshal(&versionInfo)
 			if err != nil {
 				return err
 			}
 			fmt.Println(string(marshaled))
-		} else {
+		default:
 			fmt.Println("Git Version:", versionInfo.GitVersion)
 			fmt.Println("Git Commit:", versionInfo.GitCommit)
 			fmt.Println("Build Date:", versionInfo.BuildDate)
